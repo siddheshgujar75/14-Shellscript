@@ -4,7 +4,7 @@ set -e
 
 echo " Starting Deployment..."
 
-# Go to terraform folder
+
 cd terraform
 
 echo " Initializing Terraform..."
@@ -20,7 +20,7 @@ echo " EC2 IP: $EC2_IP"
 
 cd ..
 
-# Wait for SSH
+
 echo " Waiting for EC2 to be ready..."
 
 while ! nc -z $EC2_IP 22; do
@@ -30,7 +30,7 @@ done
 
 echo " EC2 is ready!"
 
-# Create inventory
+
 echo " Creating inventory..."
 
 cat <<EOL > ansible/inventory.ini
@@ -38,10 +38,9 @@ cat <<EOL > ansible/inventory.ini
 $EC2_IP ansible_user=ubuntu ansible_ssh_private_key_file=$(pwd)/ansible-key.pem
 EOL
 
-# Fix permission
 chmod 400 ansible-key.pem
 
-# Run Ansible
+
 echo " Running Ansible..."
 
 ansible-playbook -i ansible/inventory.ini ansible/nginx-setup.yml
